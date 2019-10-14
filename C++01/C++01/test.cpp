@@ -57,21 +57,21 @@ using namespace std;
 //}
 
 //全缺省:所有参数都带默认值
-void TestFunc(int a = 1, int b = 2, int c = 3)
-{
-	cout << "a = " << a << endl;
-	cout << "b = " << b << endl;
-	cout << "c = " << c << endl;
-}
-
-
-//半缺省参数
-//void TestFunc(int a, int b = 10, int c = 20) //半缺省参数必须从右往左依次来给出
+//void TestFunc(int a = 1, int b = 2, int c = 3)
 //{
 //	cout << "a = " << a << endl;
 //	cout << "b = " << b << endl;
 //	cout << "c = " << c << endl;
 //}
+
+
+//半缺省参数:只能右从左
+void TestFunc(int a, int b = 10, int c = 20) //半缺省参数必须从右往左依次来给出
+{
+	cout << "a = " << a << endl;
+	cout << "b = " << b << endl;
+	cout << "c = " << c << endl;
+}
 
 int main()
 {
@@ -81,7 +81,10 @@ int main()
 	//TestFunc(10, 20);
 	//TestFunc(10, 20, 30);
 
-
+	//半缺省
+	TestFunc(10);
+	TestFunc(10, 20);
+	TestFunc(10, 20, 30);
 
 	system("pause");
 	return 0;
