@@ -66,25 +66,152 @@ using namespace std;
 
 
 //半缺省参数:只能右从左
-void TestFunc(int a, int b = 10, int c = 20) //半缺省参数必须从右往左依次来给出
-{
-	cout << "a = " << a << endl;
-	cout << "b = " << b << endl;
-	cout << "c = " << c << endl;
+//void TestFunc(int a, int b = 10, int c = 20) //半缺省参数必须从右往左依次来给出
+//{
+//	cout << "a = " << a << endl;
+//	cout << "b = " << b << endl;
+//	cout << "c = " << c << endl;
+//}
+//
+//int main()
+//{
+//	//全缺省
+//	//TestFunc();
+//	//TestFunc(10);
+//	//TestFunc(10, 20);
+//	//TestFunc(10, 20, 30);
+//
+//	//半缺省
+//	TestFunc(10);
+//	TestFunc(10, 20);
+//	TestFunc(10, 20, 30);
+//
+//	system("pause");
+//	return 0;
+//}
+
+////函数重载：必须在相同的作用域，相同名字的函数，参数列表不同
+//int Add(int left, int right) 
+//{ 
+//	return left + right;
+//}
+//
+//double Add(double left, double right) 
+//{ 
+//	return left + right;
+//}
+//
+//long Add(long left, long right)
+//{ 
+//	return left + right;
+//}
+//
+//
+////参数列表不同：参数个数、参数类型次序不同、参数类型不同
+//void TestF()
+//{}
+//
+//void TestF(int a)
+//{}
+//
+//void TestF(char a)
+//{}
+//
+//void TestF(int a, double b)
+//{}
+//
+//void TestF(double a, int b)
+//{}
+//
+//
+///*无法重载：重载与返回值类型是否相同没有关系
+//int Add(short left, short right) 
+//{
+//	return left + right;
+//}
+//
+//short Add(short left, short right)
+//{
+//	return left + right;
+//}
+//*/
+//
+//
+///*无法重载：作用域不同
+//namespace N
+//{
+//	char Add(char left, char right)
+//	{
+//		return left + right;
+//	}
+//}*/
+//
+//int main() 
+//{
+//	//编译器编译时，会对实参类型进行推演，自动调用
+//	Add(10, 20);
+//	Add(10.0, 20.0);
+//	Add(10L, 20L);
+//
+//	system("pause");
+//	return 0;
+//}
+
+//c语言函数名字修饰规则：编译器只是在函数名字前增加_
+//int Add(int left, int right)
+//{
+//	return left + right;
+//}
+//double Add(double left, double right)
+//{
+//	return left + right;
+//}
+//
+//int main() 
+//{
+//	Add(1, 2);
+//	//Add(1.0, 2.0);
+//
+//	system("pause");
+//	return 0; 
+//}
+
+//引用
+//void Test() 
+//{
+//	int a = 10;
+//	int& ra = a; //定义引用类型
+//
+//	printf("%p\n", &a);
+//	printf("%p\n", &ra);
+//}
+
+////1.做参数
+//void Swap(int& left, int& right) 
+//{ 
+//	int temp = left;
+//	left = right;
+//	right = temp;
+//}
+
+////做返回值
+//int& Test(int& a) 
+//{
+//	a += 10; 
+//	return a;
+//}
+
+int& Add(int a, int b) 
+{ 
+	int c = a + b;
+	return c;
 }
 
-int main()
-{
-	//全缺省
-	//TestFunc();
-	//TestFunc(10);
-	//TestFunc(10, 20);
-	//TestFunc(10, 20, 30);
-
-	//半缺省
-	TestFunc(10);
-	TestFunc(10, 20);
-	TestFunc(10, 20, 30);
+int main() 
+{ 
+	int& ret = Add(1, 2);
+	Add(3, 4); 
+	cout << "Add(1, 2) is :" << ret << endl; //7
 
 	system("pause");
 	return 0;
