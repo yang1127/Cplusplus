@@ -104,41 +104,46 @@ using namespace std;
 //	return 0;
 //}
 
-void teststring()
-{
-	//string s;
-	//s.push_back(' ');    // 在s后插入空格
-	//s.append("hello ");  // 追加一个字符"hello"
-	//s += 'a';            // 追加一个字符'b'
-	//s += " xiao yang";   // 追加一个字符串"xiaoyang" 
-
-	//cout<< s <<endl;     // hello a xiao yang
-	//cout<< s.c_str() <<endl;   // 以C语言的方式打印字符串 // hello a xiao yang
-
-	////从字符串pos位置开始往后找字符c，返回该字符在字符串中的位置
-	////size_t ﬁnd (char c, size_t pos = 0)const
-	////取出域名
-	//string sl("http://www.cplusplus.com/reference/string/string/find/");
-	//cout << sl << endl;
-
-	//size_t start = sl.find("://");// 从：//这个位置开始找
-	//if (start == string::npos) 
-	//{ 
-	//	cout << "invalid sl" << endl; 
-	//	return; 
-	//}    
-	//start += 3; 
-	//size_t finish = sl.find('/', start);
-	//string address = sl.substr(start, finish - start);//在str中从pos位置开始，截取n个字符，然后将其返回
-	//cout << address << endl; // www.cplusplus.com
-
-	////删除协议前缀
-	//start = sl.find("://"); //start<->pos
-	//sl.erase(0, start + 3);
-	//cout << sl << endl;//www.cplusplus.com/reference/string/string/find/
-
-
-}
+//string类对象的修改操作
+//void teststring()
+//{
+//	//string s;
+//	//s.push_back(' ');    // 在s后插入空格
+//	//s.append("hello ");  // 追加一个字符"hello"
+//	//s += 'a';            // 追加一个字符'b'
+//	//s += " xiao yang";   // 追加一个字符串"xiaoyang" 
+//
+//	//cout<< s <<endl;     // hello a xiao yang
+//	//cout<< s.c_str() <<endl;   // 以C语言的方式打印字符串 // hello a xiao yang
+//
+//	////从字符串pos位置开始往后找字符c，返回该字符在字符串中的位置
+//	////size_t ﬁnd (char c, size_t pos = 0)const
+//	////取出域名
+//	//string sl("http://www.cplusplus.com/reference/string/string/find/");
+//	//cout << sl << endl;
+//
+//	//size_t start = sl.find("://");// 从：//这个位置开始找
+//	//if (start == string::npos) 
+//	//{ 
+//	//	cout << "invalid sl" << endl; 
+//	//	return; 
+//	//}    
+//	//start += 3; 
+//	//size_t finish = sl.find('/', start);
+//	//string address = sl.substr(start, finish - start);//在str中从pos位置开始，截取n个字符，然后将其返回
+//	//cout << address << endl; // www.cplusplus.com
+//
+//	////删除协议前缀
+//	//start = sl.find("://"); //start<->pos
+//	//sl.erase(0, start + 3);
+//	//cout << sl << endl;//www.cplusplus.com/reference/string/string/find/
+//
+//	// rfind 从字符串pos位置开始往前找字符c，返回该字符在字符串中的位置   
+//	string s1("string.cpp");
+//	size_t pos = s1.rfind('.');
+//	string place(s1.substr(pos, s1.size()-pos)); //在str中从pos位置开始，截取n个字符，然后将其返回
+//	cout << place << endl; //.cpp
+//}
 				
 ////增容
 //void PushBack() 
@@ -163,11 +168,12 @@ void teststring()
 //	}
 //}
 
-int main()
-{
-	teststring();
-	//PushBack();
+//int main()
+//{
+//	teststring();
+//	//PushBack();
+//
+//	system("pause");
+//	return 0;
+//}
 
-	system("pause");
-	return 0;
-}
