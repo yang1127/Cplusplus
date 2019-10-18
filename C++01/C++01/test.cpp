@@ -181,12 +181,43 @@ using namespace std;
 //{
 //	int a = 10;
 //	int& ra = a; //定义引用类型
+////
+////	printf("%p\n", &a);
+////	printf("%p\n", &ra);
+////}
 //
-//	printf("%p\n", &a);
-//	printf("%p\n", &ra);
+
+//int main()
+//{
+//	/*int a = 10;
+//	int& b = a;
+//	printf("%d ", b);*/
+//
+//	//指针和引用赋值时：权限缩小可以、放大不行
+//	const int& r1 = 1;
+//
+//	int a = 2;  
+//	const int& r2 = a;//引用变量可以、引用常量使用const引用；const引用可以引用常量、可以引用变量
+//
+//	const int b = 3;
+//	//int& r3 = b; //不能，引用，b只读
+//	int c = b;//可以、普通赋值
+//
+//	//int* d1 = b;//不能，指针，只读
+//	const int* d2 = &b;//可以，不能修改传给也不能修改
+//	int* d3 = &a;//可以
+//	const int* d4 = &a;//可以 
+//
+//	double e = 1.1;
+//	//int& f = e;//不能，中间引入了临时变量int f = e，再传给int& f
+//	const int& f = e;//可以
+//
+//
+//	system("pause");
+//	return 0;
 //}
 
-////1.做参数
+////做参数
 //void Swap(int& left, int& right) 
 //{ 
 //	int temp = left;
@@ -201,18 +232,19 @@ using namespace std;
 //	return a;
 //}
 
-int& Add(int a, int b) 
-{ 
-	int c = a + b;
-	return c;
-}
+//int& Add(int a, int b) 
+//{ 
+//	int c = a + b;
+//	return c;
+//}
+//
+//int main() 
+//{ 
+//	int& ret = Add(1, 2);
+//	Add(3, 4); 
+//	cout << "Add(1, 2) is :" << ret << endl; //7
+//
+//	system("pause");
+//	return 0;
+//}
 
-int main() 
-{ 
-	int& ret = Add(1, 2);
-	Add(3, 4); 
-	cout << "Add(1, 2) is :" << ret << endl; //7
-
-	system("pause");
-	return 0;
-}
