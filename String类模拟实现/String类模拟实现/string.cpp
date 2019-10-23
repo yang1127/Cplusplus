@@ -102,6 +102,11 @@ using namespace std;
 namespace xiaoyang
 {
 	class string {
+
+		friend ostream& operator<<(ostream& _cout, const string& s);
+		friend istream& operator>>(istream& _cin, const string& s);		//友元函数可以直接访问类的私有成员，它是定义在类外部的普通函数，不属于任何类，
+		//但需要在类的内部声明，声明时需要加friend关键字
+
 	public:
 
 		typedef char* iterator; //迭代器
@@ -126,10 +131,10 @@ namespace xiaoyang
 			:_str(new char[strlen(str) + 1]) //并非将常量空间的值给与，而是重新开一块空间（堆）
 		{                                    //+1 strlen算到\0 要包括\0
 			strcpy(_str, str); //while(*dst = *src) \0 也拷过去
-			_size = strlen(str); 
+			_size = strlen(str);
 			_capacity = _size; //capacity存有效字符，比真正空间还大一个
 		}
-		
+
 		~string() //清理
 		{
 			delete[] _str;
@@ -140,11 +145,11 @@ namespace xiaoyang
 		string(const string& s) //string copy(s1) 拷贝构造、深拷贝
 			:_str(new char[s._size + 1]) //可全换capacity
 			, _size(s._size)
-			,_capacity(s._size)
+			, _capacity(s._size)
 		{
 			strcpy(_str, s._str);
 		}
-		
+
 		//s1 = s2 赋值：释放旧空间、开辟新空间、拷贝
 		string& operator = (const string& s) //支持连续赋值 s1->this s2->s
 		{
@@ -159,7 +164,7 @@ namespace xiaoyang
 			return *this;
 		}
 
-		const char* c_str()
+		const char* c_str()const //获取字符串
 		{
 			return _str;  //返回_str
 		}
@@ -205,19 +210,19 @@ namespace xiaoyang
 				reserve(_capacity * 2); //扩容
 			}
 
-			//int end = _size; // \0也跟着往后移动
-			//while (end >= (int)pos) //end:0-负数，隐式类型转化、有符号转化为无符号
-			//{                       //强转
-			//	_str[end + 1] = _str[end]; //往后移动一个位置
-			//	--end;
-			//}
-
-			size_t end = _size + 1;
-			while (end >= pos)
-			{
-				_str[end] = _str[end - 1]; //前一个位置往后移动
+			int end = _size; // \0也跟着往后移动
+			while (end >= (int)pos) //end:0-负数，隐式类型转化、有符号转化为无符号
+			{                       //强转
+				_str[end + 1] = _str[end]; //往后移动一个位置
 				--end;
 			}
+
+			//size_t end = _size + 1;
+			//while (end >= pos)
+			//{
+			//	_str[end] = _str[end - 1]; //前一个位置往后移动
+			//	--end;
+			//}
 
 			_str[pos] = ch; //将字符ch放到pos位置
 			++_size;
@@ -231,19 +236,19 @@ namespace xiaoyang
 				reserve(_size + len); //扩容，reserve：已知道大小，开多少空间
 			}
 
-			//int end = _size;
-			//while (end >= (int)pos)
-			//{
-			//	_str[end + len] = _str[end];
-			//	--end;
-			//}
-
-			size_t end = _size + len;
-			while (end > pos + len)
+			int end = _size;
+			while (end >= (int)pos)
 			{
-				_str[end] = _str[end - len];
+				_str[end + len] = _str[end];
 				--end;
 			}
+
+			//size_t end = _size + len;
+			//while (end > pos + len)
+			//{
+			//	_str[end] = _str[end - len];
+			//	--end;
+			//}
 
 			while (*str) //不能使用strcpy()进行拷贝，它会拷贝\0,会覆盖插入的数据
 			{
@@ -284,34 +289,131 @@ namespace xiaoyang
 		const string& operator += (char ch)
 		{
 			push_back(ch);
-			return* this;
+			return*this;
 		}
 
 		const string& operator += (const char* str)
 		{
 			append(str);
-			return* this;
+			return*this;
 		}
-				
+
 		//const string& operator+=(const string& s)
 		//{
 		//	append(s._str);
 		//	return *this;
 		//}
 
-		const string& operator > (char ch);
-		const string& operator < (char ch);
-		const string& operator <= (char ch);
-		const string& operator >= (char ch);
-		const string& operator == (char ch);
+		bool operator > (const string& s)const //s1 > s2: s1->this  s2->s
+		{                                      // const、非const均可调用
+			const char* str1 = _str;
+			const char* str2 = s._str;
+			while (*str1 && *str2) //两个走完时
+			{
+				if (*str1 > *str2) // >
+				{
+					return true;
+				}
+				else if (*str1 < *str2)
+				{
+					return false;
+				}
+				else
+				{
+					++str1; //const修饰的 char* str1 可修改，const str1不可修改
+					++str2;
+				}
+			}
 
+			if (*str1 || *str2) //当两个中有一个没有走完
+			{
+				return false;
+			}
+		}
+
+		bool operator == (const string& s)const
+		{
+			const char* str1 = _str;
+			const char* str2 = s._str;
+			while (*str1 && *str2) //两个走完时
+			{
+				if (*str1 != *str2)
+				{
+					return false;
+				}
+				else
+				{
+					++str1; //相等时++
+					++str2;
+				}
+			}
+
+			if (*str1 || *str2) //当两个中有一个没有走完
+			{
+				return false;
+			}
+		}
+
+		bool operator < (const string& s)const //复用
+		{
+			return *this > s || *this == s;
+		}
+
+		bool operator <= (const string& s)const
+		{
+			return !(*this > s);
+		}
+
+		bool operator >= (const string& s)const
+		{
+			return !(*this < s);
+		}
+
+		size_t find(char ch) //遍历一遍找到ch
+		{
+			for (size_t i = 0; i < _size; ++i)
+			{
+				if (_str[i] == ch)
+				{
+					return i;
+				}
+			}
+
+			return npos;
+		}
+		//getline
+
+		void swap(string& s)//直接交换两个空间
+		{
+			std::swap(_str, s._str);  //命名空间冲突，调用标准库
+			std::swap(_size, s._size);
+			std::swap(_capacity, s._capacity);
+		}
 
 	private:
 		char* _str;
 		size_t _size;
 		size_t _capacity;
+
+		static size_t npos;
 	};
+
+	size_t string::npos = 0;
+
+	ostream& operator<<(ostream& _cout, const string& s) //输出
+	{
+		_cout << s._str;
+
+		return _cout;
+	}
+
+	istream& operator>>(istream& _cin, const string& s) //输入
+	{
+		_cin >> s._str;
+		return _cin;
+	}
 }
+
 
 void test1()
 {
@@ -357,10 +459,30 @@ void test2()
 	cout << s2.c_str() << endl;
 }
 
+void test3()
+{
+	xiaoyang::string s1("yang beautiflu");
+	xiaoyang::string s2("hello xiaoyang!");
+	cout << s1.operator>(s2) << endl;
+	cout << s1.operator==(s2) << endl;
+	cout << s1.operator<(s2) << endl;
+	cout << s1.operator<=(s2) << endl;
+	cout << s1.operator>=(s2) << endl;
+}
+
+void test4()
+{
+	xiaoyang::string s;
+	cin >> s;
+	cout << s << endl;
+}
+
 int main()
 {
-	//test1();
-	test2();
+	//test1(); //构造、析构、拷贝、赋值
+	//test2(); //增加
+	//test3(); //operator
+	//test4(); // >> 、<<
 
 	system("pause");
 	return 0;
