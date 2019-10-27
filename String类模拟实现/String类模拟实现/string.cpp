@@ -104,7 +104,8 @@ namespace xiaoyang
 	class string {
 
 		friend ostream& operator<<(ostream& _cout, const string& s);
-		friend istream& operator>>(istream& _cin, const string& s);		//友元函数可以直接访问类的私有成员，它是定义在类外部的普通函数，不属于任何类，
+		friend istream& operator>>(istream& _cin, const string& s);
+		//友元函数可以直接访问类的私有成员，它是定义在类外部的普通函数，不属于任何类，
 		//但需要在类的内部声明，声明时需要加friend关键字
 
 	public:
@@ -380,7 +381,8 @@ namespace xiaoyang
 			}
 
 			return npos;
-		}
+		}
+
 		//getline
 
 		void swap(string& s)//直接交换两个空间
