@@ -79,60 +79,82 @@ using namespace std;
 //	return 0;
 //}
 
-template<class T1, class T2>
-class Data
-{
-public:
-	Data() { cout << "Data<T1, T2>" << endl; }
-private:
-	T1 _d1;
-	T2 _d2;
-};
+//template<class T1, class T2>
+//class Data
+//{
+//public:
+//	Data() { cout << "Data<T1, T2>" << endl; }
+//private:
+//	T1 _d1;
+//	T2 _d2;
+//};
+//
+////全特化
+//template<>
+//class Data<int, int>
+//{
+//public:
+//	Data() { cout << "Data<int, int>" << endl; }
+//};
+//
+////偏特化<->半特化
+//template<class T1>
+//class Data<T1, char>
+//{
+//public:
+//	Data() { cout << "Data<int, char>" << endl; }
+//};
+//
+////偏特化：两个参数偏特化为指针类型
+//template<class T1, class T2>
+//class Data<T1*, T2*>
+//{
+//public:
+//	Data() { cout << "Data<T1*, T2*>" << endl; }
+//};
+//
+////偏特化：两个参数偏特化为引用类型
+//template<class T1, class T2>
+//class Data<T1&, T2&>
+//{
+//public:
+//	Data() { cout << "Data<T1&, T2&>" << endl; }
+//};
+//
+//int main()
+//{
+//	Data<int, char> d1;  //半Data<int, char>
+//	Data<int, int> d2;   //全Data<int, int>
+//	Data<char, char> d3; //半Data<int, char>
+//	Data<char, int> d4;  //原Data<T1, T2>
+//	Data<char*, int*> d5;     //半Data<T1*, T2*>
+//	Data<char*, double*> d6;  //半Data<T1*, T2*>
+//	Data<char&, int&> d7;     //半Data<T1&, T2&>
+//	Data<char&, double&> d8;  //半Data<T1&, T2&>
+//
+//	system("pause");
+//	return 0;
+//}
 
-//全特化
-template<>
-class Data<int, int>
-{
-public:
-	Data() { cout << "Data<int, int>" << endl; }
-};
-
-//偏特化<->半特化
-template<class T1>
-class Data<T1, char>
-{
-public:
-	Data() { cout << "Data<int, char>" << endl; }
-};
-
-//偏特化：两个参数偏特化为指针类型
-template<class T1, class T2>
-class Data<T1*, T2*>
-{
-public:
-	Data() { cout << "Data<T1*, T2*>" << endl; }
-};
-
-//偏特化：两个参数偏特化为引用类型
-template<class T1, class T2>
-class Data<T1&, T2&>
-{
-public:
-	Data() { cout << "Data<T1&, T2&>" << endl; }
-};
-
-int main()
-{
-	Data<int, char> d1;  //半Data<int, char>
-	Data<int, int> d2;   //全Data<int, int>
-	Data<char, char> d3; //半Data<int, char>
-	Data<char, int> d4;  //原Data<T1, T2>
-	Data<char*, int*> d5;     //半Data<T1*, T2*>
-	Data<char*, double*> d6;  //半Data<T1*, T2*>
-	Data<char&, int&> d7;     //半Data<T1*, T2*>
-	Data<char&, double&> d8;  //半Data<T1*, T2*>
-
-	system("pause");
-	return 0;
-}
-
+//template<class T, size_t N> //常量不可修改，可以给缺省值但必须从右往左缺省
+//class array
+//{
+//public:
+//	T& operator[](size_t pos)
+//	{
+//		return _arr[pos];
+//	}
+//
+//private:
+//	T _a[N];
+//	size_t _size;
+//};
+//
+//int main()
+//{ 
+//	array<int, 10> a1;  //10
+//	array<int, 100> a2;  //100
+//
+//	system("pause");
+//	return 0;
+//}
