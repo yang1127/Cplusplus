@@ -6,9 +6,9 @@ using namespace std;
 int main()
 {
 	//test_map_set1();
-	//test_map_set2();
+	test_map_set2();
 	//test_map_set3();
-	test_map_set4();
+	//test_map_set4();
 
 	system("pause");
 	return 0;
