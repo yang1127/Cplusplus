@@ -87,7 +87,8 @@ void test_map_set2()  // map底层存pair <-> value type
 
 
 	//统计次数
-	//（法一）
+	//法一
+
 	string strs[] = { "苹果", "西瓜", "草莓", "草莓", "西瓜", "草莓" };
 	map<string, int> countMap; //统计次数
 	for (auto& e : strs)
@@ -103,49 +104,39 @@ void test_map_set2()  // map底层存pair <-> value type
 		}
 		else
 		{
-			// 调用构造函数创建匿名对象
 			//countMap.insert(pair<map<string, int>(e, 1));
-	
+			
+			// 调用构造函数创建匿名对象
 			countMap.insert(pair<string, int>(e, 1));
-
-			//make_pair
-			// template<class K, class V>
-			/*inline pair<K, V> make_pair(const K& k, const V& v) //make_pair 函数模板
-			{
-				return pair<K, V>(k, v);
-			}*/
-			//countMap.insert(make_pair(e, 1));
 		}
 	}
 
-    //法二
+	//法二
 
-	////make_pair
+    string strs[] = { "苹果", "苹果","苹果","西瓜", "草莓", "草莓", "西瓜", "草莓" };
+	map<string, int> countMap;
+	for (auto& e : strs)
+	{
+		//pair<map<string, int>::iterator, bool> ret = countMap.insert(make_pair(e, 1));
+		//pair<map<string, int>::iterator, bool> ret = countMap.insert(pair<string, int>(e, 1));
+		auto ret = countMap.insert(pair<string, int>(e, 1));
+	    if (ret.second == false) // second-->bool
+	    {
+			ret.first->second++; // ret-->pair  first-->iterator + ->second --> value 次数
+	    }
+	}
+
+    //法三
+	//countMap.insert(pair<string, int>(k, map_type())); 
+	//countMap.insert(make_pair>(k, map_type())); //等价于上一个
+	//
+	//make_pair
     //template<class K, class V>
 	///*inline pair<K, V> make_pair(const K& k, const V& v) //make_pair 函数模板
 	//{
 	//	return pair<K, V>(k, v);
 	//}*/
 	//countMap.insert(make_pair(e, 1));
-
-	//operator[]:可插入、可修改，返回value的值
-	/*V& operator[](const K& k)
-	{
-		pair<iterator, bool> ret = insert(make_pair(k, V())); //value的缺省值
-		return ret.first->second;
-	}*/
-
-	//string strs[] = { "苹果", "苹果","苹果","西瓜", "草莓", "草莓", "西瓜", "草莓" };
-	//map<string, int> countMap;
-	//for (auto& e : strs)
-	//{
-
-	//  pair<map<string, int>::iterator, bool> ret = countMap.insert(make_pair(e, 1));
-	//	if (ret.second == false) // second-->bool
-	//	{
-	//		ret.first->second++; // ret-->pair  first-->iterator + ->second --> value 次数
-	//	}
-	//}
 
 	string strs[] = { "苹果", "西瓜", "草莓", "草莓", "西瓜", "草莓" };
 	map<string, int> countMap; //统计次数
@@ -154,9 +145,15 @@ void test_map_set2()  // map底层存pair <-> value type
 		countMap[e]++;
 	}
 
+	//operator[]:可插入、可修改，返回value的值
+	/*V& operator[](const K& k)
+	{
+		pair<iterator, bool> ret = insert(make_pair(k, V())); //value的缺省值
+		return ret.first->second;
+	}*/
+
 	countMap["香蕉"];
 	countMap["香蕉"] = 5;
-
 }
 
 void test_map_set3()
@@ -203,9 +200,19 @@ void test_map_set4()
 
 
 
-//笔试题
-#include <vector>
+//笔试题cvte
+
 //方法一
+#include <vector>
+
+struct CountCompare
+{
+	bool operator()(const pair<string, int>& l, const pair<string, int>& r)
+	{
+		return l.second > r.second;
+	}
+};
+
 void GetFavoriteFruit(const vector<string>& fruits, size_t k)
 {
 	// 1.统计出水果出现次数
@@ -216,8 +223,20 @@ void GetFavoriteFruit(const vector<string>& fruits, size_t k)
 	}
 
 	// 2.找出大家最喜欢吃的水果
+	//数组、vector、deque（不推荐）
+	//vector<pair<string, int>> v(countMap.begin(), countMap.end())
+	vector<pair<string, int>> v;
+	for (auto& e : countMap)
+	{
+		v.push_back(e);
+	}
+	//	O(N*logN)
+	sort(v.begin(), v.end(), CountCompare()); //仿函数
 
-	
+	for (size_t i = 0; i < k; ++i)
+	{
+		cout << v[i].first << ":" << v[i].second << endl;
+	}
 }
 
 void test_map_set()
@@ -226,8 +245,19 @@ void test_map_set()
 	GetFavoriteFruit(v, 3);
 }
 
-//方法二：优先级队列
+
+
+//方法二：优先级队列 -> 小堆 比根节点大的值才能进入
 #include<queue>
+
+struct CountCompare
+{
+	bool operator()(const pair<string, int>& l, const pair<string, int>& r)
+	{
+		return l.second > r.second;
+	}
+};
+
 
 void GetFavoriteFruit(const vector<string>& fruits, size_t k)
 {
@@ -240,11 +270,11 @@ void GetFavoriteFruit(const vector<string>& fruits, size_t k)
 
 	// 2.找出大家最喜欢吃的水果
 	//最大的前k个，创建成一个小堆
-	priority_queue<pair<string, int>, vector<pair<string, int>>, CountCompare> pq; pq;
+	priority_queue<pair<string, int>, vector<pair<string, int>>, CountCompare> pq; 
 	size_t i = 0;
 	for (auto&e : countMap)
 	{
-		if (i < k)
+		if (i < k) //将前k个进入
 		{
 			pq.push(e);
 			++i;
@@ -252,7 +282,7 @@ void GetFavoriteFruit(const vector<string>& fruits, size_t k)
 		else
 		{
 			//O(logk)*N
-			if (e.second > pq.top().second)
+			if (e.second > pq.top().second) //大于堆顶，堆顶出，再入
 			{
 				pq.pop();
 				pq.push(e);
@@ -261,8 +291,10 @@ void GetFavoriteFruit(const vector<string>& fruits, size_t k)
 	}
 }
 
+
 //方法三
 #include <functional>
+
 void GetFavoriteFruit(const vector<string>& fruits, size_t k)
 {
 	// 1.统计出水果出现次数
