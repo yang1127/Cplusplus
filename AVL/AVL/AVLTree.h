@@ -1,4 +1,5 @@
 #include<iostream>
+#include<assert.h>
 using namespace std;
 
 template<class K, class V>
@@ -8,7 +9,7 @@ struct AVLTreeNode
 	AVLTreeNode<K, V>* _right;
 	AVLTreeNode<K, V>* _parent;
 
-	pair<K, V> _kv;
+	pair<K, V> _kv; //pair -> std
 
 	int _bf; // 平衡因子
 
@@ -62,7 +63,9 @@ public:
 			}
 		}
 
-		cur = new Node(kv); //找到cur的位置后，再来链接cur，三岔链
+		Node* newnode = new Node(kv);
+		cur = newnode;
+		cur->_bf = 0; //找到cur的位置后，再来链接cur，三岔链
 		if (parent->_kv.first < kv.first)
 		{
 			parent->_right = cur;
@@ -105,9 +108,13 @@ public:
 				{
 					RotateL(parent);
 				}
-				else if ()
+				else if (parent->_bf == -2 && cur->_bf == 1) //左右旋
 				{
-
+					RotateLR(parent);
+				}
+				else if (parent->_bf == 2 && cur->_bf == -1) //右左旋
+				{
+					RotateRL(parent);
 				}
 
 				break;
@@ -172,7 +179,7 @@ public:
 			_root = subL;
 			subL->_parent = NULL;
 		}
-		else
+		else //看subL与parentParent的左孩子链接、还是右孩子链接
 		{
 			if (parentParent->_left == parent)
 			{
@@ -189,6 +196,111 @@ public:
 		parent->_bf = subL->_bf = 0;
 	}
 
+	//void RotateLR(Node* parent)  //平衡因子没有考虑周到
+	//{
+	//	RotateL(parent->_left);
+	//	RotateR(parent);
+	//}
+
+	//void RotateRL(Node* parent)
+	//{
+	//	RotateR(parent->_right);
+	//	RotateL(parent);
+	//}
+
+	void RotateLR(Node* parent)
+	{
+		Node* subL = parent->_left;
+		Node* subLR = subL->_right;
+		int bf = subLR->_bf; // subLR->_bf 插入节点后的平衡因子值，三种情况：-1、0、1 
+
+		RotateL(parent->_left);
+		RotateR(parent);
+
+		if (bf == -1)
+		{
+			subL->_bf = 0;
+			parent->_bf = 0;
+			subLR->_bf = 1;
+		}
+		else if (bf == 0)
+		{
+			subL->_bf = 0;
+			parent->_bf = 0;
+			subLR->_bf = 0;
+		}
+		else if (bf == 1)
+		{
+			subL->_bf = -1;
+			parent->_bf = 0;
+			subLR->_bf = 0;
+		}
+	}
+
+
+	void RotateRL(Node* parent)
+	{
+		Node* subR = parent->_right;
+		Node* subRL = subR->_left; 
+		int bf = subRL->_bf; //三种情况
+
+		RotateR(parent->_right);
+		RotateL(parent);
+
+		if (bf == 1)
+		{
+			subRL->_bf = 0;
+			parent->_bf = -1;
+			subR->_bf = 0;
+		}
+		else if (bf == -1)
+		{
+			subRL->_bf = 0;
+			parent->_bf = 0;
+			subR->_bf = 1;
+		}
+		else if (bf == 0)
+		{
+			subRL->_bf = 0;
+			parent->_bf = 0;
+			subR->_bf = 0;
+		}
+	}
+
+	int  Height(Node* root)  //求树的高度：后序思想：左右根
+	{
+		if (root == nullptr)
+			return 0;
+
+		int leftHeight = Height(root->_left);
+		int rightHeight = Height(root->_right);
+		//递归:求子树的子树... -> 求根
+		return leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1; //左右子树中最大的+1
+	}
+
+	bool _IsBalance(Node* root)
+	{
+		if (root == nullptr) //空树也为平衡树
+			return true;
+
+		int leftHeight = Height(root->_left);   //求左树的高度
+		int rightHeight = Height(root->_right); //求右树的高度
+
+		if (rightHeight - leftHeight != root->_bf)
+		{
+			cout << root->_kv.first << ":平衡因子异常" << endl;
+			return false;
+		}
+
+		return abs(leftHeight - rightHeight) < 2    //绝对值小于2，满足  层层递归看子树是否满足
+			       && _IsBalance(root->_left)
+			       && _IsBalance(root->_right);     //root==nullptr时终止
+	}
+
+	bool IsBalance() //调用函数解决_root私有问题
+	{
+		return _IsBalance(_root);
+	}
 
 private:
 	Node* _root = nullptr;
@@ -196,10 +308,18 @@ private:
 
 void TestAVLTree()
 {
-	AVLTree<int, double> t;
-	t.Insert(make_pair(1, 1.1));
-	t.Insert(make_pair(2, 2.2));
-	t[3];
-	t[3] = 3.3;
-	t[9] = 9.9;
+	//AVLTree<int, double> t;
+	//t.Insert(make_pair(1, 1.1));
+	//t.Insert(make_pair(2, 2.2));
+	//t[3] = 3.3;
+	//t[5] = 5.5;
+	//t[6] = 6.6;
+
+	int a[] = { 4, 2, 6, 1, 3, 5, 15, 7, 16, 14 };
+	AVLTree<int, int> t;
+	for (auto e : a)
+	{
+		t.Insert(make_pair(e, e));
+	}
+	cout << t.IsBalance() << endl;
 }
