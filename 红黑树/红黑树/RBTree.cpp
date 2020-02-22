@@ -1,7 +1,10 @@
 #include "RBTree.h"
+#include "MyMap.h"
+#include "MySet.h"
 
 int main()
 {
-	TestRBTree();
+	//TestRBTree();
+
 	return 0;
 }

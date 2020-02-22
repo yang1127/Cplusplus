@@ -23,37 +23,42 @@ struct RBTreeNode
 		, _right(nullptr)
 		, _parent(nullptr)
 		, _data(data)
-		, _col(BLACK)
+		, _col(BLACK) //两个颜色都可以，后期会变色
 	{}
 };
 
-template<class K, class V>
+//template<class K, class V>
+template<class K, class T, class KeyOfValue> //红黑树存什么由第二个参数T所决定的，既可以存map、又可以set
+
 class RBTree
 {
-	typedef RBTreeNode<pair<K, V>> Node;
+	//typedef RBTreeNode<pair<K, V>> Node;
+	typedef RBTreeNode<T> Node;
 public:
 	RBTree()
 		:_root(nullptr)
 	{}
 
-	pair<Node*, bool> Insert(const pair<K, V>& kv) //插入树 -> 搜索树的规则插入
+	//pair<Node*, bool> Insert(const pair<K, V>& kv) //插入树 -> 搜索树的规则插入
+	pair<Node*, bool> Insert(const T& data)
 	{
 		if (_root == nullptr)
 		{
-			_root = new Node(kv); //为空插入新节点
+			_root = new Node(data); //为空插入新节点
 			return make_pair(_root, true);
 		}
 
+		KeyOfValue kov;
 		Node* parent = nullptr;
 		Node* cur = _root;
 		while (cur)
-		{
-			if (cur->_data.first < kv.first) //大于朝右走
+		{   //仿函数取出T中的K进行比较
+			if (kov(cur->_data) < kov(data)) //大于朝右走
 			{
 				parent = cur;
 				cur = cur->_right;
 			}
-			else if (cur->_data.first > kv.first) //小于朝左走
+			else if (kov(cur->_data) > kov(data)) //小于朝左走
 			{
 				parent = cur;
 				cur = cur->_left;
@@ -64,9 +69,9 @@ public:
 			}
 		}
 
-		cur = new Node(kv);
+		cur = new Node(data);
 		//链接
-		if (parent->_data.first < kv.first) //大于父节点
+		if (kov(parent->_data) < kov(data)) //大于父节点
 		{
 			parent->_right = cur;
 			cur->_parent = parent;
@@ -342,13 +347,13 @@ private:
 	Node* _root;
 };
 
-void TestRBTree()
-{
-	int a[] = { 4, 2, 6, 1, 3, 5, 15, 7, 16, 14 };
-	RBTree<int, int> t;
-	for (auto e : a)
-	{
-		t.Insert(make_pair(e, e));
- 	}
-	cout << t.IsValidRBTree() << endl;
-}
+//void TestRBTree()
+//{
+//	int a[] = { 4, 2, 6, 1, 3, 5, 15, 7, 16, 14 };
+//	RBTree<int, int> t;
+//	for (auto e : a)
+//	{
+//		t.Insert(make_pair(e, e));
+// 	}
+//	cout << t.IsValidRBTree() << endl;
+//}
