@@ -4,7 +4,7 @@
 
 int main()
 {
-	//TestRBTree();
+	TestRBTree();
 
 	return 0;
 }
