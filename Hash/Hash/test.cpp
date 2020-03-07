@@ -12,7 +12,8 @@ int main()
 	//test_op();
 
 	CLOSE_HASH::Test();
+	BUCKET_HASH::TestHash();
 
-	system("pause");
+		system("pause");
 	return 0;
 }
