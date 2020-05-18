@@ -116,7 +116,9 @@ using namespace std;
 //	cout << d1.operator == (d2) << endl;
 //
 //	return 0;
-//}//赋值运算符重载
+//}
+
+//赋值运算符重载
 class Date
 {
 public:
@@ -132,7 +134,8 @@ public:
 		_year = d._year;
 		_month = d._month;
 		_day = d._day;
-	}
+	}
+
 
 	//d1 = d3
 	Date& operator=(const Date& d)
@@ -167,4 +170,4 @@ int main()
 
 	system("pause");
 	return 0;
-}
+}

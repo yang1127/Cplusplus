@@ -27,20 +27,20 @@ struct RBTreeNode
 	{}
 };
 
-//template<class K, class V>
-template<class K, class T, class KeyOfValue> //红黑树存什么由第二个参数T所决定的，既可以存map、又可以set
+template<class K, class V>
+//template<class K, class T, class KeyOfValue> //红黑树存什么由第二个参数T所决定的，既可以存map、又可以set
 
 class RBTree
 {
-	//typedef RBTreeNode<pair<K, V>> Node;
-	typedef RBTreeNode<T> Node;
+	typedef RBTreeNode<pair<K, V>> Node;
+	//typedef RBTreeNode<T> Node;
 public:
 	RBTree()
 		:_root(nullptr)
 	{}
 
-	//pair<Node*, bool> Insert(const pair<K, V>& kv) //插入树 -> 搜索树的规则插入
-	pair<Node*, bool> Insert(const T& data)
+	pair<Node*, bool> Insert(const pair<K, V>& kv) //插入树 -> 搜索树的规则插入
+	//pair<Node*, bool> Insert(const T& data)
 	{
 		if (_root == nullptr)
 		{
@@ -347,13 +347,13 @@ private:
 	Node* _root;
 };
 
-//void TestRBTree()
-//{
-//	int a[] = { 4, 2, 6, 1, 3, 5, 15, 7, 16, 14 };
-//	RBTree<int, int> t;
-//	for (auto e : a)
-//	{
-//		t.Insert(make_pair(e, e));
-// 	}
-//	cout << t.IsValidRBTree() << endl;
-//}
+void TestRBTree()
+{
+	int a[] = { 4, 2, 6, 1, 3, 5, 15, 7, 16, 14 };
+	RBTree<int, int> t;
+	for (auto e : a)
+	{
+		t.Insert(make_pair(e, e));
+ 	}
+	cout << t.IsValidRBTree() << endl;
+}
