@@ -141,7 +141,7 @@ int main()
 };
 */
 
-
+/*
 class Person //基类
 {
 public:
@@ -221,5 +221,151 @@ int main()
 	Student s3("rose", 17);
 	s1 = s3;
 	system("pause");
+	return 0;
+}
+*/
+
+/*
+class Student;
+class Person
+{
+public:
+	friend void Display(const Person& p, const Student& s);
+protected:
+	string _name; // 姓名
+};
+
+class Student : public Person
+{
+protected:
+	int _stuNum; // 学号
+};
+
+void Display(const Person& p, const Student& s)
+{
+	cout << p._name << endl; //基类
+	cout << s._stuNum << endl; // × 子类
+}
+
+int main()
+{
+	Person p;
+	Student s;
+	Display(p, s);
+	system("pause");
+	return 0;
+}
+*/
+
+/*
+class Person
+{
+public:
+	Person() 
+	{ 
+		++_count; 
+	}
+protected:
+	string _name; // 姓名
+public:
+	static int _count; // 统计人的个数。
+};
+
+int Person::_count = 0;
+
+class Student : public Person
+{
+protected:
+	int _stuNum; // 学号
+};
+
+class Graduate : public Student
+{
+protected:
+	string _seminarCourse; // 研究科目
+};
+
+void TestPerson()
+{
+	Student s1;
+	Student s2;
+	Student s3;
+	Graduate s4;
+	cout << " 人数 :" << Person::_count << endl; //4
+	Student::_count = 0;
+	cout << " 人数 :" << Person::_count << endl; //0
+}
+
+int main()
+{
+	TestPerson();
+	system("pause");
+	return 0;
+}
+*/
+
+/*
+//虚拟继承可以解决菱形继承的二义性和数据冗余的问题
+//如下面的继承关系，在Student和Teacher的继承Person时使用虚拟继承，即可解决问题
+//需要注意的是，虚拟继承不要在其他地方去使用
+
+class Person
+{
+public:
+	string _name; // 姓名
+};
+
+class Student : virtual public Person
+{
+protected:
+	int _num; //学号
+};
+
+class Teacher : virtual public Person
+{
+protected:
+	int _id; // 职工编号
+};
+
+class Assistant : public Student, public Teacher
+{
+protected:
+	string _majorCourse; // 主修课程
+};
+
+int main()
+{
+	Assistant a;
+	a._name = "peter";
+	system("pause");
+	return 0;
+}
+*/
+
+
+class Base1 {
+public:
+	int _b1;
+};
+
+class Base2 {
+public:
+	int _b2;
+};
+
+class Derive : public Base1, public Base2 {
+public:
+	int _d;
+};
+
+int main() {
+	// A. p1 == p2 == p3
+	// B. p1 < p2 < p3
+	// C. p1 == p3 != p2
+	// D. p1 != p2 != p3
+	Derive d;
+	Base1* p1 = &d;
+	Base2* p2 = &d;
+	Derive* p3 = &d;
 	return 0;
 }
