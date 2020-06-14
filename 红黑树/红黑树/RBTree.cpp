@@ -4,7 +4,10 @@
 
 int main()
 {
-	TestRBTree();
+	//TestRBTree();
+	xiaoyang::test_map();
+	//xiaoyang::test_set();
 
+	system("pause");
 	return 0;
 }

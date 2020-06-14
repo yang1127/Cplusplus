@@ -27,51 +27,127 @@ struct RBTreeNode
 	{}
 };
 
-template<class K, class V>
-//template<class K, class T, class KeyOfValue> //红黑树存什么由第二个参数T所决定的，既可以存map、又可以set
+template<class T>
+struct _RBTreeIterator
+{
+	typedef RBTreeNode<T> Node;
+	typedef _RBTreeIterator<T> Self; //迭代器自身
+	Node* _node; //节点指针
+
+	_RBTreeIterator(Node* _node)
+		:_node(_node)
+	{}
+
+	T& operator*()
+	{
+		return _node->_data;
+	}
+
+	T* operator->()
+	{
+		return &_node->_data; //返回数据地址
+	}
+
+	Self operator++()
+	{
+		//1、右子树为空 -> 中序下一个就是右子树的最左节点
+		//2、当前节点右子树为空，当前节点所在的子树已经访问完了，要访问孩子是左的祖先
+		if (_node->_right != nullptr)
+		{
+			Node* left = _node->_right;
+			while (left->_left)
+			{
+				left = left->_left;
+			}
+			_node = left;
+		}
+		else //不为空
+		{
+			Node* cur = _node;
+			Node* parent = cur->_parent;
+			while (parent != nullptr && cur == parent->_right)
+			{
+				cur = parent;
+				parent = parent->_parent;
+			}
+			_node = parent;
+		}
+		return *this;
+	}
+
+	bool operator != (const Self& s)
+	{
+		return _node != s._node;
+	}
+};
+
+//template<class K, class V>
+//map -> RBTree<K, pair<K,V>>
+//set -> RBTree<K, K>
+//T并不是kv的value，而是树里面要存的值的类型
+template<class K, class T, class KeyOfT> //红黑树存什么由第二个参数T所决定的，既可以存map、又可以set
 
 class RBTree
 {
-	typedef RBTreeNode<pair<K, V>> Node;
-	//typedef RBTreeNode<T> Node;
+	//typedef RBTreeNode<pair<K, V>> Node;
+	typedef RBTreeNode<T> Node;
 public:
+	typedef _RBTreeIterator<T> iterator;
+
+	iterator begin() //中序的最左节点
+	{
+		Node* left = _root;
+		while (left && left->_left)
+		{
+			left = left->_left;
+		}
+		return iterator(left);
+	}
+
+	iterator end()
+	{
+		return iterator(nullptr);
+	}
+
 	RBTree()
 		:_root(nullptr)
 	{}
 
-	pair<Node*, bool> Insert(const pair<K, V>& kv) //插入树 -> 搜索树的规则插入
-	//pair<Node*, bool> Insert(const T& data)
+	//pair<Node*, bool> Insert(const pair<K, V>& kv) //插入树 -> 搜索树的规则插入
+	pair<iterator, bool> Insert(const T& data) //节点指针就可以构造迭代器
 	{
 		if (_root == nullptr)
 		{
 			_root = new Node(data); //为空插入新节点
-			return make_pair(_root, true);
+			return make_pair(iterator(_root), true);
 		}
 
-		KeyOfValue kov;
+		KeyOfT kot; //仿函数
 		Node* parent = nullptr;
 		Node* cur = _root;
 		while (cur)
 		{   //仿函数取出T中的K进行比较
-			if (kov(cur->_data) < kov(data)) //大于朝右走
+			if (kot(cur->_data) < kot(data)) //大于朝右走
 			{
 				parent = cur;
 				cur = cur->_right;
 			}
-			else if (kov(cur->_data) > kov(data)) //小于朝左走
+			else if (kot(cur->_data) > kot(data)) //小于朝左走
 			{
 				parent = cur;
 				cur = cur->_left;
 			}
 			else //相等时，表示已有，插入失败
 			{
-				return make_pair(_root, false);
+				return make_pair(iterator(_root), false);
 			}
 		}
 
-		cur = new Node(data);
+		Node* newnode = new Node(data);
+		cur = newnode;
+		cur->_col = RED;
 		//链接
-		if (kov(parent->_data) < kov(data)) //大于父节点
+		if (kot(parent->_data) < kot(data)) //大于父节点
 		{
 			parent->_right = cur;
 			cur->_parent = parent;
@@ -171,14 +247,14 @@ public:
 			}
 		}
 		_root->_col = BLACK;
-		return make_pair(cur, true);
+		return make_pair(iterator(newnode), true);
 	}
 
 	void RotateL(Node* parent) //左旋
 	{
 		//   p
 		//    subR   
-		//   subRL		
+		//  subRL		
 		Node* subR = parent->_right;
 		Node* subRL = subR->_left;
 
@@ -347,6 +423,7 @@ private:
 	Node* _root;
 };
 
+/*
 void TestRBTree()
 {
 	int a[] = { 4, 2, 6, 1, 3, 5, 15, 7, 16, 14 };
@@ -357,3 +434,4 @@ void TestRBTree()
  	}
 	cout << t.IsValidRBTree() << endl;
 }
+*/
