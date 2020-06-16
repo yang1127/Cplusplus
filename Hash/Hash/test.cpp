@@ -2,6 +2,8 @@
 using namespace std;
 
 #include "unordered_map_set.h"
+#include "UnorderedMap.h"
+#include "UnorderedSet.h"
 #include "HashTable.h"
 
 int main()
@@ -11,9 +13,13 @@ int main()
 
 	//test_op();
 
-	CLOSE_HASH::Test();
-	BUCKET_HASH::TestHash();
+	//CLOSE_HASH::Test();
+	//BUCKET_HASH::TestHash();
 
-		system("pause");
+	xiaoyang::test_unordered_map();
+	xiaoyang::test_unordered_set();
+
+
+	system("pause");
 	return 0;
 }
