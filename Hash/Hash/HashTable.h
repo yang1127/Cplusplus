@@ -413,7 +413,7 @@ namespace BUCKET_HASH
 			return iterator(nullptr, this);
 		}
 
-		pair<Node*, bool> Insert(const T& data) //T：map->pair set->k
+		pair<iterator, bool> Insert(const T& data) //T：map->pair set->k
 		//pair<Node*, bool> Insert(const pair<K, V>& kv)
 		{
 			KeyOfT kot;
@@ -457,7 +457,7 @@ namespace BUCKET_HASH
 			{
 				if (kot(cur->_data) == kot(data))
 				{
-					return make_pair(cur, false);
+					return make_pair(iterator(cur, this), false);
 				}
 
 				cur = cur->_next;
@@ -469,7 +469,7 @@ namespace BUCKET_HASH
 			_tables[index] = newnode;
 			++_dataNum;
 
-			return make_pair(newnode, true);
+			return make_pair(iterator(newnode, this), true);
 		}
 
 		// O(链式桶的长度)
