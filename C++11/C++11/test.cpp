@@ -144,6 +144,7 @@ using namespace std;
 //	int&& d = a + 10;
 //}
 
+/*
 // 实现String的深拷贝
 class String
 {
@@ -233,5 +234,190 @@ int main()
 	String s3(s1);       // 拷贝构造
 	String s5(move(s1)); // 移动构造
 
+	return 0;
+}
+*/
+
+//int main()
+//{
+//	vector<String> v;
+//	//String s1("左值");
+//	//v.push_back(s1);               // 拷贝构造-深拷贝-代价大
+//	//v.push_back("右值-将亡值");    // 移动构造-移动资源-代价小
+//	v.push_back(move(s1));         // 移动构造-这里会付出代价，产生副作用，s1被制空了
+//
+//
+//	String s2("左值");  // 了解一下，一般情况下我们还是使用上面push_pack就可以
+//	v.emplace_back(s2);
+//	v.emplace_back(String("右值-将亡值"));
+//
+//	return 0;
+//}
+
+
+//void Fun(int &x){ cout << "lvalue ref" << endl; }
+//void Fun(int &&x){ cout << "rvalue ref" << endl; }
+//void Fun(const int &x){ cout << "const lvalue ref" << endl; }
+//void Fun(const int &&x){ cout << "const rvalue ref" << endl; }
+//
+//template<typename T>
+//void PerfectForward(T && t)   //模板传参的过程中，右值属性会丢失 -》完美转发可以解决
+//{
+//	Fun(t);
+//}
+//
+//int main()
+//{
+//	PerfectForward(10); // rvalue ref
+//
+//	int a = 0;
+//	PerfectForward(a); // lvalue ref
+//	PerfectForward(std::move(a)); // rvalue ref
+//
+//	const int b = 8;
+//	PerfectForward(b); // const lvalue ref
+//	PerfectForward(std::move(b)); // const rvalue ref
+//
+//	return 0;
+//}
+
+struct Goods
+{
+	string _name;
+	double _price;
+	int _evaluation; // 评价
+	// 比如：销量、综合评价
+};
+
+bool PriceCompare(const Goods& g1, const Goods& g2)
+{
+	return g1._price < g2._price;
+}
+
+bool EvaluationCompare(const Goods& g1, const Goods& g2)
+{
+	return g1._evaluation < g2._evaluation;
+}
+
+struct PriceCompareOBJ
+{
+	bool operator()(const Goods& g1, const Goods& g2)
+	{
+		return g1._price < g2._price;
+	}
+};
+
+struct EvaluationCompareOBJ
+{
+	bool operator()(const Goods& g1, const Goods& g2)
+	{
+		return g1._evaluation < g2._evaluation;
+	}
+};
+
+//int main()
+//{
+//	// 最简单的lambda表达式, 该lambda表达式没有任何意义
+//	[]{};
+//
+//	// 省略参数列表和返回值类型，返回值类型由编译器推导为int
+//	int a = 3, b = 4,c=5;
+//	[a,b]{return a + b; }; // 代表捕捉a,b
+//	[=]{return a + b; }; // 代表捕捉外边所有对象
+//
+//	// 写一个交换a、b的lamber
+//	// mutable改变捕捉到的a、b拷贝可以改变
+//	auto lamber_swap1 = [a, b]()mutable->void{int tmp = a; a = b; b = tmp; };
+//	lamber_swap1(); // 不能发生交换，传值拷贝的方式捕捉a、b
+//
+//	// 正式的写法
+//	auto lamber_swap2 = [&a, &b](){int tmp = a; a = b; b = tmp; };
+//	lamber_swap2(); 
+//
+//	auto lamber_swap3 = [](int& a, int& b){int tmp = a; a = b; b = tmp; };
+//	lamber_swap3(a, b);
+//
+//	auto lamber_swap4 = [&](){int tmp = a; a = b; b = tmp; };
+//	lamber_swap4();
+//
+//	return 0;
+//}
+
+//int main()
+//{
+//	Goods gds[] = { { "苹果", 2.1,  5}, { "香蕉", 3, 4}, { "橙子", 2.2, 2}, { "菠萝", 1.5, 2} };
+//	// 按价格/评价排序的三种写法
+//	// 1、函数指针 C沿袭过来
+//	PriceCompare(gds[0], gds[1]);
+//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), PriceCompare);
+//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), EvaluationCompare);
+//
+//	// 2、仿函数/函数对象 -> 比起函数指针的优势，即可作为类型在模板参数传递，也可以在函数参数作为对象
+//	PriceCompareOBJ pcobj;
+//	pcobj(gds[0], gds[1]);
+//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), pcobj);
+//
+//	EvaluationCompareOBJ ecobj;
+//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), ecobj);
+//
+//	// 如果我们还是价格降序，评价的降序，销量升序降序，综合升序降序
+//	// 我们会发现，我们要写很多个函数或者是仿函数，有没有更好的解决方式呢？-》labmber
+//
+//	// 3.labmber表达式  ->相比以上两种方式简单方便,如果熟悉labmber语法之后，代码可读性更强
+//	auto priceLess = [](const Goods& g1, const Goods& g2)->bool
+//	{
+//		return g1._price < g2._price;
+//	};
+//
+//	// 返回值可以省略，但是建议写上
+//	auto priceGreater = [](const Goods& g1, const Goods& g2)
+//	{
+//		return g1._price > g2._price;
+//	};
+//	priceLess(gds[0], gds[1]);
+//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), priceLess);
+//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), priceGreater);
+//
+//	// 其实实际中更多的都懒得取名字，直接用
+//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), [](const Goods& g1, const Goods& g2)->bool
+//	{return g1._price < g2._price; });
+//
+//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), [](const Goods& g1, const Goods& g2)->bool
+//	{return g1._price > g2._price; });
+//
+//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), [](const Goods& g1, const Goods& g2)->bool
+//	{return g1._evaluation < g2._evaluation; });
+//
+//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), [](const Goods& g1, const Goods& g2)->bool
+//	{return g1._evaluation > g2._evaluation; });
+//
+//	return 0;
+//}
+
+class Rate
+{
+public:
+	Rate(double rate) : _rate(rate)
+	{}
+
+	double operator()(double money, int year)
+	{
+		return money * _rate * year;
+	}
+
+private:
+	double _rate;
+};
+
+int main()
+{
+	// 函数对象
+	double rate = 0.49;
+	Rate r1(rate);
+	r1(10000, 2);
+
+	// lamber
+	auto r2 = [=](double monty, int year)->double {return monty * rate*year; };
+	r2(10000, 2);
 	return 0;
 }
