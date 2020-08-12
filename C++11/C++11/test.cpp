@@ -281,39 +281,39 @@ int main()
 //	return 0;
 //}
 
-struct Goods
-{
-	string _name;
-	double _price;
-	int _evaluation; // 评价
-	// 比如：销量、综合评价
-};
-
-bool PriceCompare(const Goods& g1, const Goods& g2)
-{
-	return g1._price < g2._price;
-}
-
-bool EvaluationCompare(const Goods& g1, const Goods& g2)
-{
-	return g1._evaluation < g2._evaluation;
-}
-
-struct PriceCompareOBJ
-{
-	bool operator()(const Goods& g1, const Goods& g2)
-	{
-		return g1._price < g2._price;
-	}
-};
-
-struct EvaluationCompareOBJ
-{
-	bool operator()(const Goods& g1, const Goods& g2)
-	{
-		return g1._evaluation < g2._evaluation;
-	}
-};
+//struct Goods
+//{
+//	string _name;
+//	double _price;
+//	int _evaluation; // 评价
+//	// 比如：销量、综合评价
+//};
+//
+//bool PriceCompare(const Goods& g1, const Goods& g2)
+//{
+//	return g1._price < g2._price;
+//}
+//
+//bool EvaluationCompare(const Goods& g1, const Goods& g2)
+//{
+//	return g1._evaluation < g2._evaluation;
+//}
+//
+//struct PriceCompareOBJ
+//{
+//	bool operator()(const Goods& g1, const Goods& g2)
+//	{
+//		return g1._price < g2._price;
+//	}
+//};
+//
+//struct EvaluationCompareOBJ
+//{
+//	bool operator()(const Goods& g1, const Goods& g2)
+//	{
+//		return g1._evaluation < g2._evaluation;
+//	}
+//};
 
 //int main()
 //{
@@ -368,7 +368,7 @@ struct EvaluationCompareOBJ
 //	{
 //		return g1._price < g2._price;
 //	};
-//
+
 //	// 返回值可以省略，但是建议写上
 //	auto priceGreater = [](const Goods& g1, const Goods& g2)
 //	{
@@ -378,46 +378,124 @@ struct EvaluationCompareOBJ
 //	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), priceLess);
 //	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), priceGreater);
 //
-//	// 其实实际中更多的都懒得取名字，直接用
-//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), [](const Goods& g1, const Goods& g2)->bool
-//	{return g1._price < g2._price; });
-//
-//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), [](const Goods& g1, const Goods& g2)->bool
-//	{return g1._price > g2._price; });
-//
-//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), [](const Goods& g1, const Goods& g2)->bool
-//	{return g1._evaluation < g2._evaluation; });
-//
-//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), [](const Goods& g1, const Goods& g2)->bool
-//	{return g1._evaluation > g2._evaluation; });
+	//// 其实实际中更多的都懒得取名字，直接用
+	//sort(gds, gds + sizeof(gds) / sizeof(gds[0]), [](const Goods& g1, const Goods& g2)->bool
+	//{return g1._price < g2._price; });
+
+	//sort(gds, gds + sizeof(gds) / sizeof(gds[0]), [](const Goods& g1, const Goods& g2)->bool
+	//{return g1._price > g2._price; });
+
+	//sort(gds, gds + sizeof(gds) / sizeof(gds[0]), [](const Goods& g1, const Goods& g2)->bool
+	//{return g1._evaluation < g2._evaluation; });
+
+	//sort(gds, gds + sizeof(gds) / sizeof(gds[0]), [](const Goods& g1, const Goods& g2)->bool
+	//{return g1._evaluation > g2._evaluation; });
 //
 //	return 0;
 //}
 
-class Rate
-{
-public:
-	Rate(double rate) : _rate(rate)
-	{}
+//class Rate
+//{
+//public:
+//	Rate(double rate) : _rate(rate)
+//	{}
+//
+//	double operator()(double money, int year)
+//	{
+//		return money * _rate * year;
+//	}
+//
+//private:
+//	double _rate;
+//};
+//
+//int main()
+//{
+//	// 函数对象
+//	double rate = 0.49;
+//	Rate r1(rate);
+//	r1(10000, 2);
+//
+//	// lamber
+//	auto r2 = [=](double monty, int year)->double {return monty * rate*year; };
+//	r2(10000, 2);
+//	return 0;
+//}
 
-	double operator()(double money, int year)
-	{
-		return money * _rate * year;
-	}
+//排序
+//#include <iostream>
+//using namespace std;
+//
+//struct Goods
+//{
+//	string _name;
+//	double _price;
+//	int _evaluation; // 评价
+//};
+//
+//int main()
+//{
+//	Goods gds[] = { { "苹果", 2.1,  5}, { "香蕉", 3, 4}, { "橙子", 2.2, 2}, { "菠萝",  1.5, 2} };
+//
+//	// lambda表达式
+//	auto priceLess = [](const Goods& g1, const Goods& g2)->bool
+//	{
+//		return g1._price < g2._price;
+//	};
+//	sort(gds, gds + sizeof(gds) / sizeof(gds[0]), priceLess);	
+//}
 
-private:
-	double _rate;
-};
+//#include <iostream>
+//#include <thread>
+//using namespace std;
+//
+////mutex _mtx;
+//void f1(int n)
+//{
+//	_mtx.lock();
+//	for (int i = 0; i < n; ++i)
+//	{
+//		cout << this_thread::get_id() << ":" << i << endl;
+//	}
+//	_mtx.unlock();
+//}
+//
+//struct F2
+//{
+//	void operator()(int n)
+//	{
+//		for (int i = 0; i < n; ++i)
+//		{
+//			cout << this_thread::get_id() << ":" << i << endl;
+//		}
+//	}
+//};
+//
+//int main()
+//{
+//	thread t1;
+//	thread t2(f1, 10);    // 函数指针的方式
+//
+//	//F2 f2;
+//	//thread t3(f2, 10); // 仿函数
+//	thread t3(F2(), 10); // 仿函数
+//
+//	//lambda
+//	thread t4([](int n)
+//	{
+//		for (int i = 0; i < n; ++i)
+//		{
+//			cout << this_thread::get_id() << ":" << i << endl;
+//		}
+//	}, 10);     // lamber
+//
+//	t1 = thread(f1, 10);
+//
+//	t1.join();
+//	t2.join();
+//	t3.join();
+//	t4.join();
+//
+//	return 0;
+//}
 
-int main()
-{
-	// 函数对象
-	double rate = 0.49;
-	Rate r1(rate);
-	r1(10000, 2);
-
-	// lamber
-	auto r2 = [=](double monty, int year)->double {return monty * rate*year; };
-	r2(10000, 2);
-	return 0;
-}
